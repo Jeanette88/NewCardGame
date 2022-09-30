@@ -1,0 +1,85 @@
+﻿@page "/games"
+@page "/games/{id:int}"
+
+@inject NavigationManager _Nav
+
+
+
+<h3>Play Card Game</h3>
+
+Cards remaining: @deck.Cards.Count
+
+<tr></tr>
+
+<button type="button" @onclick="() => DealCard(true)" class="btn btn-outline-success" disabled="@(!deck.Cards.Any())">Deal One Card!</button>
+
+
+<button type="button" @onclick="@(() => RandomCards())" class="btn btn-outline-success" disabled="@(!deck.Cards.Any())">Change All Cards!</button>
+
+<div class="text-center">
+
+    <div class="">
+
+        @foreach (Card card in hand.Cards)
+        {
+            <img class="playing-card" src='/images/cards/@(card.ItsOK ? card.Image : card.Name)' title='@string.Format("{0} of {1}", card.Name, card.Suit)'
+             alt="@(card.ItsOK ? string.Format("{0} of {1}", card.Name, card.Suit) : "True")" />
+        }
+
+    </div>
+
+    <tr></tr>
+
+
+    <button type="button" @onclick="(() => DeleteCards())" class="btn btn-outline-success">Remove Last Card!</button>
+
+</div>
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    private Deck deck { get; set; }
+    private Hand hand { get; set; } = new Hand();
+    private Card card { get; set; }
+
+    private bool battleDone = false;
+
+    protected override void OnInitialized()
+    {
+        deck = new Deck(true);
+    }
+
+    private void DealCard(bool cardOkey)
+    {
+        var card = deck.Deal(cardOkey);
+        hand.Cards.Add(card);
+    }
+
+    private void RandomCards()
+    {
+        hand.RandomCard();
+    }
+
+    public void DeleteCards()
+    {       
+        if (deck.Cards == null)
+        {
+            _Nav.NavigateTo("/games");
+        }
+        else
+        {
+            hand.DeleteCard();
+        }
+    }
+
+
+
+
+}
+

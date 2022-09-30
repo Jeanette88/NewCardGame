@@ -1,0 +1,46 @@
+﻿@page "/cardgame"
+
+
+<h3>CardGame</h3>
+
+
+Cards remaining: @deck.Cards.Count
+
+<br />
+
+<button type="button" @onclick="() => DealCard(true)" disabled="@(!deck.Cards.Any())">Deal!</button>
+
+<br />
+
+
+<ul class="box">
+    @foreach (Card card in hand.Cards)
+    {
+
+        <img class="playing-card" src='/images/cards/@(card.ItsOK ? card.Image : card.Name)' title='@string.Format("{0} of {1}", card.Name, card.Suit)' alt="@(card.ItsOK ? string.Format("{0} of {1}", card.Name, card.Suit) : "True")" />
+
+
+    }
+
+
+</ul>
+
+
+@code {
+
+    private Deck deck { get; set; }
+    private Hand hand { get; set; } = new Hand();
+
+    protected override void OnInitialized()
+    {
+        deck = new Deck(true);
+
+    }
+
+    private void DealCard(bool cardOkey)
+    {
+        var card = deck.Deal(cardOkey);
+
+        hand.Cards.Add(card);
+    }
+}

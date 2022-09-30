@@ -1,0 +1,46 @@
+﻿@page "/history"
+@page "/history/{id:int}"
+
+<h3>Card History</h3>
+
+
+<table class="table">
+
+        @foreach (var his in hand.Cards)
+        {
+            <tr>
+                <th scope="col">@his.Id</th>
+           
+               
+            </tr>
+        }
+
+        @cardDto.CardId
+
+</table>
+
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    private Deck deck { get; set; }
+    private Hand hand { get; set; } = new Hand();
+    private Card card { get; set; }
+    private History history { get; set; }
+    private CardDto cardDto { get; set; } = new CardDto();
+
+    protected override void OnInitialized()
+    {
+        deck = new Deck(true);      
+      
+    }
+
+    private void RandomCards()
+    {
+        hand.RandomCard();
+    }
+
+
+}
